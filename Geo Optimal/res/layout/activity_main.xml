@@ -8,12 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Main" >
     
-    <com.google.android.maps.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:apiKey="0SJWJNNoRKR5NUp5OGx6t9MZC7I15OnC2w_-PGA"
-        android:clickable="true" />
 
+   <com.google.android.maps.MapView
+    android:id="@+id/mapa"
+    android:layout_width="fill_parent"
+    android:layout_height="300sp"
+    android:apiKey="0-ltoy22TLP9UcSDLv_0ImvCHRPWiGzq_1_-yJA"
+    android:clickable="true" />
+    
 </RelativeLayout>
