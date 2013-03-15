@@ -1,10 +1,13 @@
 package com.test.geo.optimal;
 
 
+import java.security.Provider;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -51,6 +54,8 @@ public class Main extends MapActivity{
         longitud = (TextView) findViewById(R.id.longitud);
         latitud = (TextView) findViewById(R.id.latitud);
         precision = (TextView) findViewById(R.id.precision);
+        this.satelites = (TextView) findViewById(R.id.satelites);
+        
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_launcher);
         itemizedOverlay = new MyOverlay(drawable, this);
         localizar();
@@ -61,14 +66,14 @@ public class Main extends MapActivity{
 
     	locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
     	
-    	Location loc = 
-    		locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    	Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     	
     	
     	mostrarPosicion(loc);
     	
     	
     	locListener = new LocationListener() {
+    		
 	    	public void onLocationChanged(Location location) {
 	    		mostrarPosicion(location);
 	    	}
@@ -80,7 +85,6 @@ public class Main extends MapActivity{
 	    	}
 	    	public void onStatusChanged(String provider, int status, Bundle extras){
 	    		Log.i("", "Provider Status: " + status);
-	    		
 	    	}
     	};
     	
@@ -97,6 +101,7 @@ public class Main extends MapActivity{
 	    		latitud_actual=loc.getLatitude();
 	    		precision_actual=loc.getAccuracy();
 	    		mostrarPosicion();
+	    		
 	    		latitud.setText("Latitud: " + String.valueOf(loc.getLatitude()));
 	    		longitud.setText("Longitud: " + String.valueOf(loc.getLongitude()));
 	    		precision.setText("Precision: " + String.valueOf(loc.getAccuracy()) +" m");
@@ -127,7 +132,19 @@ public class Main extends MapActivity{
  		
  		mapController.animateTo(point);
  		mapController.setZoom(20);
- 		mapa.postInvalidate();
+ 		mapa.invalidate();
+ 		
+ 		GpsStatus gpsstatus = this.locManager.getGpsStatus(null);
+    	Iterable<GpsSatellite> satelitess = gpsstatus.getSatellites();
+    	
+    	int nSatelites = 0;
+    	
+    	for(GpsSatellite gpssatelites : satelitess){
+    		nSatelites++;
+    	}
+    	
+    	Log.i(TAG, "nSatelites: "+nSatelites);
+    	this.satelites.setText(""+nSatelites);
  		
     }
     
