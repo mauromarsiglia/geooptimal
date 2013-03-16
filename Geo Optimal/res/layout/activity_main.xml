@@ -8,13 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Main" >
 
-    <com.google.android.maps.MapView
-        android:id="@+id/mapa"
-        android:layout_width="fill_parent"
-        android:layout_height="250dp"
-        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
-        android:clickable="true" />
-
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -55,29 +48,44 @@
         android:id="@+id/localizar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mapa"
-        android:layout_below="@+id/mapa"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/mapa"
         android:text="@string/localizar" />
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapa"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/localizar"
+        android:layout_centerHorizontal="true"
+        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
+        android:clickable="true" >
+    </com.google.android.maps.MapView>
 
     <LinearLayout
         android:id="@+id/votar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/localizar"
-        android:layout_marginLeft="28dp"
-        android:layout_toRightOf="@+id/localizar" >
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mapa" >
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/mala"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/si" />
+            android:text="@string/mala" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buena"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no" />
+            android:text="@string/buena" />
+
+        <Button
+            android:id="@+id/excelente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/excelente" />
     </LinearLayout>
 
 </RelativeLayout>

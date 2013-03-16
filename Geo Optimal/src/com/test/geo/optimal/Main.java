@@ -1,17 +1,22 @@
 package com.test.geo.optimal;
 
 
-import java.security.Provider;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.UUID;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -25,6 +30,8 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.test.geo.optimal.library.Muestra;
+import com.test.geo.optimal.persistence.SQLiteManager;
 
 
 
@@ -33,7 +40,10 @@ public class Main extends MapActivity{
 	private MapView mapa = null;
 	private static double longitud_actual;
 	private static double latitud_actual;
-	private static double precision_actual=999999999;
+	private static double precision_actual;
+	private static int numero_satelites;
+	
+	private static String proveedor;
 	private Location currentBestLocation;
 	
 	private static String TAG="MAIN";
@@ -42,11 +52,15 @@ public class Main extends MapActivity{
 	private TextView precision;
 	private TextView satelites;
 	private Button Localizar;
+	private Button mala;
+	private Button buena;
+	private Button excelente;
 	
 	private LocationManager locManager;
 	private LocationListener locListener;
 	
 	MyOverlay itemizedOverlay;
+	private View viewToBeCaptured;
 	
 
 	@Override
@@ -63,6 +77,10 @@ public class Main extends MapActivity{
         this.precision = (TextView) findViewById(R.id.precision);
         this.satelites = (TextView) findViewById(R.id.satelites);
         this.Localizar = (Button) findViewById(R.id.localizar);
+        this.mala= (Button) findViewById(R.id.mala);
+        this.buena= (Button) findViewById(R.id.buena);
+        this.excelente= (Button) findViewById(R.id.excelente);
+        
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_launcher);
         itemizedOverlay = new MyOverlay(drawable, this);
@@ -77,30 +95,97 @@ public class Main extends MapActivity{
 			}
 		});
         
+        mala.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				agregarMuestra(Muestra.MALA);
+			}
+		});
+        
+        buena.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				agregarMuestra(Muestra.BUENA);
+			}
+		});
+        
+        excelente.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				agregarMuestra(Muestra.EXCELENTE);
+			}
+		});
+        
         //localizar();
 	}
 	
+	private void agregarMuestra(int calificacion){
+		guardarImagen();
+		Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,0,calificacion,"",guardarImagen());
+		SQLiteManager.getInstance().saveMuestra(muestra, this);
+		
+		for(Muestra m:SQLiteManager.getInstance().getAll(this)){
+			Log.i(TAG,m.getCalificacion()+"");
+		}
+	}
+	
+	private String guardarImagen(){
+
+        viewToBeCaptured = this.findViewById(R.id.mapa);
+        viewToBeCaptured.setDrawingCacheEnabled(true);
+        Bitmap b = viewToBeCaptured.getDrawingCache();
+
+        File sd = Environment.getExternalStorageDirectory();
+        String the_path = Environment.getExternalStorageDirectory()
+        			+ File.separator + "prohibidoparquear";
+        String uid = UUID.randomUUID().toString();
+      	String the_file = the_path + File.separator +  uid +".jpg";
+
+        File f = new File(the_file);
+          
+          try {
+               if (sd.canWrite()) {
+                    f.createNewFile();
+                    OutputStream os = new FileOutputStream(f);
+                    b.compress(Bitmap.CompressFormat.JPEG, 90, os);
+                    os.close();
+               }
+          } catch (FileNotFoundException e) {
+               e.printStackTrace();
+          } catch (IOException e) {
+               e.printStackTrace();
+          }
+          viewToBeCaptured.setDrawingCacheEnabled(false);
+          return uid;
+	}
 	private void obtenerUbicacion(){
 
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-		Log.i(TAG,"ABCD");
+		
+		
 		LocationListener locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {
-
+		    	
 		    	if(isBetterLocation(location, Main.this.currentBestLocation)){
 		    		longitud_actual= location.getLongitude();
 			    	latitud_actual = location.getLatitude();
+			    	proveedor=location.getProvider();
+			    	precision_actual=location.getAccuracy();
 		    	}else{
 		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
 			    	latitud_actual = Main.this.currentBestLocation.getLatitude();
+			    	proveedor=Main.this.currentBestLocation.getProvider();
+			    	precision_actual=Main.this.currentBestLocation.getAccuracy();
 		    	}
-		    	
-		    	Log.i(TAG, longitud_actual+","+latitud_actual);
 		    	
 		    }
 
-		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+		    public void onStatusChanged(String provider, int status, Bundle extras) {
+		    	
+		    }
 
 		    public void onProviderEnabled(String provider) {}
 
@@ -131,6 +216,8 @@ public class Main extends MapActivity{
  	//	mapController.setZoom(20);
 
 	}
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
