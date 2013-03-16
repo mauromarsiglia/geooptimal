@@ -9,12 +9,66 @@
     tools:context=".Main" >
 
     <LinearLayout
+        android:id="@+id/votar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/mapa"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/mala"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mala" />
+
+        <Button
+            android:id="@+id/buena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buena" />
+
+        <Button
+            android:id="@+id/excelente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/excelente" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/satelites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="# de satelites" />
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapa"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_alignLeft="@+id/votar"
+        android:layout_below="@+id/satelites"
+        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
+        android:clickable="true" >
+    </com.google.android.maps.MapView>
+
+    <ImageButton
+        android:id="@+id/localizar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mapa"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/linearLayout1"
+        android:src="@drawable/push_pin" />
+
+    <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mapa"
-        android:layout_below="@+id/mapa"
-        android:layout_marginTop="41dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="34dp"
         android:orientation="vertical" >
 
         <TextView
@@ -35,57 +89,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="precision" />
-
-        <TextView
-            android:id="@+id/satelites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="# de satelites" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/localizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/mapa"
-        android:text="@string/localizar" />
-
-    <com.google.android.maps.MapView
-        android:id="@+id/mapa"
-        android:layout_width="fill_parent"
-        android:layout_height="250dp"
-        android:layout_below="@+id/localizar"
-        android:layout_centerHorizontal="true"
-        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
-        android:clickable="true" >
-    </com.google.android.maps.MapView>
-
-    <LinearLayout
-        android:id="@+id/votar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/mapa" >
-
-        <Button
-            android:id="@+id/mala"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mala" />
-
-        <Button
-            android:id="@+id/buena"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buena" />
-
-        <Button
-            android:id="@+id/excelente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/excelente" />
     </LinearLayout>
 
 </RelativeLayout>

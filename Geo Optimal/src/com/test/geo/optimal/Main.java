@@ -22,6 +22,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -51,10 +53,11 @@ public class Main extends MapActivity{
 	private TextView latitud;
 	private TextView precision;
 	private TextView satelites;
-	private Button Localizar;
+	private ImageButton Localizar;
 	private Button mala;
 	private Button buena;
 	private Button excelente;
+	private LinearLayout votar;
 	
 	private LocationManager locManager;
 	private LocationListener locListener;
@@ -76,13 +79,13 @@ public class Main extends MapActivity{
         this.latitud = (TextView) findViewById(R.id.latitud);
         this.precision = (TextView) findViewById(R.id.precision);
         this.satelites = (TextView) findViewById(R.id.satelites);
-        this.Localizar = (Button) findViewById(R.id.localizar);
+        this.Localizar = (ImageButton) findViewById(R.id.localizar);
         this.mala= (Button) findViewById(R.id.mala);
         this.buena= (Button) findViewById(R.id.buena);
         this.excelente= (Button) findViewById(R.id.excelente);
         
         
-        Drawable drawable = this.getResources().getDrawable(R.drawable.ic_launcher);
+        Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
         itemizedOverlay = new MyOverlay(drawable, this);
 
         obtenerUbicacion();
@@ -92,6 +95,8 @@ public class Main extends MapActivity{
 			@Override
 			public void onClick(View v) {
 				mostrarUbicacionMapa();
+				votar=(LinearLayout)findViewById(R.id.votar);
+				votar.setVisibility(View.VISIBLE);
 			}
 		});
         
@@ -124,7 +129,7 @@ public class Main extends MapActivity{
 	
 	private void agregarMuestra(int calificacion){
 		guardarImagen();
-		Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,0,calificacion,"",guardarImagen());
+		Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,numero_satelites,calificacion,"",guardarImagen());
 		SQLiteManager.getInstance().saveMuestra(muestra, this);
 		
 		for(Muestra m:SQLiteManager.getInstance().getAll(this)){
@@ -164,27 +169,38 @@ public class Main extends MapActivity{
 	private void obtenerUbicacion(){
 
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		
-		
+				
 		LocationListener locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {
-		    	
+		    	Log.i(TAG, "-------------------------------------------------");
+		    	Log.i(TAG,location.getExtras().getInt("satellites")+"");
+		    	Log.i(TAG, "-------------------------------------------------");
 		    	if(isBetterLocation(location, Main.this.currentBestLocation)){
 		    		longitud_actual= location.getLongitude();
 			    	latitud_actual = location.getLatitude();
 			    	proveedor=location.getProvider();
 			    	precision_actual=location.getAccuracy();
+			    	numero_satelites=location.getExtras().getInt("satellites");
 		    	}else{
 		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
 			    	latitud_actual = Main.this.currentBestLocation.getLatitude();
 			    	proveedor=Main.this.currentBestLocation.getProvider();
 			    	precision_actual=Main.this.currentBestLocation.getAccuracy();
+			    	numero_satelites=Main.this.currentBestLocation.getExtras().getInt("satellites");
 		    	}
+		    	
+		    	Log.i(TAG, "-------------------------------------------------");
+		    	Log.i(TAG,"longitud:"+longitud_actual);
+		    	Log.i(TAG,"latitud:"+latitud_actual);
+		    	Log.i(TAG, "-------------------------------------------------");
 		    	
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {
-		    	
+		    	/*Log.i(TAG, "-------------------------------------------------");
+		    	Log.i(TAG, extras+"");
+		    	Log.i(TAG, extras.getInt("satellites")+"");
+		    	Log.i(TAG, "-------------------------------------------------");*/
 		    }
 
 		    public void onProviderEnabled(String provider) {}
