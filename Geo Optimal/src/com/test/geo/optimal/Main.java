@@ -14,6 +14,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -31,14 +34,18 @@ public class Main extends MapActivity{
 	private static double longitud_actual;
 	private static double latitud_actual;
 	private static double precision_actual=999999999;
+	private Location currentBestLocation;
 	
 	private static String TAG="MAIN";
-	private static TextView longitud;
-	private static TextView latitud;
-	private static TextView precision;
-	private static TextView satelites;
+	private TextView longitud;
+	private TextView latitud;
+	private TextView precision;
+	private TextView satelites;
+	private Button Localizar;
+	
 	private LocationManager locManager;
 	private LocationListener locListener;
+	
 	MyOverlay itemizedOverlay;
 	
 
@@ -51,16 +58,95 @@ public class Main extends MapActivity{
 
         mapa.setBuiltInZoomControls(true);
         
-        longitud = (TextView) findViewById(R.id.longitud);
-        latitud = (TextView) findViewById(R.id.latitud);
-        precision = (TextView) findViewById(R.id.precision);
+        this.longitud = (TextView) findViewById(R.id.longitud);
+        this.latitud = (TextView) findViewById(R.id.latitud);
+        this.precision = (TextView) findViewById(R.id.precision);
         this.satelites = (TextView) findViewById(R.id.satelites);
+        this.Localizar = (Button) findViewById(R.id.localizar);
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.ic_launcher);
         itemizedOverlay = new MyOverlay(drawable, this);
-        localizar();
+
+        obtenerUbicacion();
+        
+        Localizar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mostrarUbicacionMapa();
+			}
+		});
+        
+        //localizar();
 	}
 	
+	private void obtenerUbicacion(){
+
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		Log.i(TAG,"ABCD");
+		LocationListener locationListener = new LocationListener() {
+		    public void onLocationChanged(Location location) {
+
+		    	if(isBetterLocation(location, Main.this.currentBestLocation)){
+		    		longitud_actual= location.getLongitude();
+			    	latitud_actual = location.getLatitude();
+		    	}else{
+		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
+			    	latitud_actual = Main.this.currentBestLocation.getLatitude();
+		    	}
+		    	
+		    	Log.i(TAG, longitud_actual+","+latitud_actual);
+		    	
+		    }
+
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		    public void onProviderEnabled(String provider) {}
+
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+
+		//locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+	}
+	
+	public void mostrarUbicacionMapa(){
+		List<Overlay> mapOverlays = mapa.getOverlays();
+    	
+		Log.i(TAG, longitud_actual+","+latitud_actual);
+ 		GeoPoint point = new GeoPoint((int)(latitud_actual* 1E6), (int)(longitud_actual* 1E6));
+ 		
+ 		OverlayItem overlayitem = new OverlayItem(point, "Hola",
+ 				"!Precision!");
+  
+ 		itemizedOverlay.addOverlay(overlayitem);
+ 		mapOverlays.add(itemizedOverlay);
+ 		
+ 		
+ 		MapController mapController = mapa.getController();
+ 		
+ 		mapController.animateTo(point);
+ 	//	mapController.setZoom(20);
+
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
+	/*
 	private void localizar()
     {
 
@@ -89,7 +175,7 @@ public class Main extends MapActivity{
     	};
     	
     	locManager.requestLocationUpdates(
-    			LocationManager.GPS_PROVIDER, 10000, 0, locListener);
+    			LocationManager.GPS_PROVIDER, 30000, 0, locListener);
     	
     }
      
@@ -147,22 +233,66 @@ public class Main extends MapActivity{
     	this.satelites.setText(""+nSatelites);
  		
     }
+    */
     
 	
+	private static final int THIRTY_SECONDS = 1000 * 30;
 
+	/** Determines whether one Location reading is better than the current Location fix
+	  * @param location  The new Location that you want to evaluate
+	  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+	  */
+	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+	    if (currentBestLocation == null) {
+	        // A new location is always better than no location
+	        return true;
+	    }
+
+	    // Check whether the new location fix is newer or older
+	    long timeDelta = location.getTime() - currentBestLocation.getTime();
+	    boolean isSignificantlyNewer = timeDelta > THIRTY_SECONDS;
+	    boolean isSignificantlyOlder = timeDelta < -THIRTY_SECONDS;
+	    boolean isNewer = timeDelta > 0;
+
+	    // If it's been more than two minutes since the current location, use the new location
+	    // because the user has likely moved
+	    if (isSignificantlyNewer) {
+	        return true;
+	    // If the new location is more than two minutes older, it must be worse
+	    } else if (isSignificantlyOlder) {
+	        return false;
+	    }
+
+	    // Check whether the new location fix is more or less accurate
+	    int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+	    boolean isLessAccurate = accuracyDelta > 0;
+	    boolean isMoreAccurate = accuracyDelta < 0;
+	    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+	    // Check if the old and new location are from the same provider
+	    boolean isFromSameProvider = isSameProvider(location.getProvider(),
+	            currentBestLocation.getProvider());
+
+	    // Determine location quality using a combination of timeliness and accuracy
+	    if (isMoreAccurate) {
+	        return true;
+	    } else if (isNewer && !isLessAccurate) {
+	        return true;
+	    } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+	        return true;
+	    }
+	    return false;
+	}
+
+	/** Checks whether two providers are the same */
+	private boolean isSameProvider(String provider1, String provider2) {
+	    if (provider1 == null) {
+	      return provider2 == null;
+	    }
+	    return provider1.equals(provider2);
+	}
 		
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 
 }

@@ -4,5 +4,8 @@
     <string name="app_name">geo.optimal</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="localizar">Localizar</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 
 </resources>

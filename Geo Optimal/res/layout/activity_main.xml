@@ -11,8 +11,8 @@
     <com.google.android.maps.MapView
         android:id="@+id/mapa"
         android:layout_width="fill_parent"
-        android:layout_height="300sp"
-        android:apiKey="0-ltoy22TLP9UcSDLv_0ImvCHRPWiGzq_1_-yJA"
+        android:layout_height="250dp"
+        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
         android:clickable="true" />
 
     <LinearLayout
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/mapa"
         android:layout_below="@+id/mapa"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="41dp"
         android:orientation="vertical" >
 
         <TextView
@@ -49,7 +49,35 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="# de satelites" />
+    </LinearLayout>
 
+    <Button
+        android:id="@+id/localizar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mapa"
+        android:layout_below="@+id/mapa"
+        android:text="@string/localizar" />
+
+    <LinearLayout
+        android:id="@+id/votar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/localizar"
+        android:layout_marginLeft="28dp"
+        android:layout_toRightOf="@+id/localizar" >
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/si" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no" />
     </LinearLayout>
 
 </RelativeLayout>
