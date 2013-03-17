@@ -9,6 +9,10 @@ package com.test.geo.optimal.library;
  */
 public class Muestra {
 	
+	public final int MALA = 1;
+	public final int BUENA = 2;
+	public final int EXCELENTE = 3;
+	
 	private String latitude;
 	private String longuitude;
 	private int calificacion;
