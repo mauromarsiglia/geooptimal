@@ -8,45 +8,79 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Results" >
 
-    <TableLayout
-        android:id="@+id/table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp" >
+  
+    
+    <TableLayout   
+    android:id="@+id/table"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  
+    android:shrinkColumns="*"  
+    android:stretchColumns="*">  
+    <TableRow  
+        android:id="@+id/tableRow4"  
+        android:layout_height="wrap_content"  
+        android:layout_width="match_parent"  
+        android:gravity="center_horizontal">  
 
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="6"
+            android:gravity="center"
+            android:text="@string/results"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:typeface="serif" >
+</TextView>  
+    </TableRow>  
+    <TableRow  
+        android:layout_height="wrap_content"  
+        android:layout_width="match_parent">
 
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
+    <TextView
+            android:id="@+id/TextView05"
+            android:text="@string/latitud"
+            android:textStyle="bold"
+            android:typeface="serif" />
+  
+    <TextView
+            android:id="@+id/TextView04"
+            android:text="@string/longitud"
+            android:textStyle="bold"
+            android:typeface="serif" >
+	</TextView>  
 
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
+        <TextView
+            android:id="@+id/TextView03"
+            android:text="@string/calificacion"
+            android:textStyle="bold"
+	        android:typeface="serif" >
+	</TextView>  
 
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
+        <TextView
+            android:id="@+id/TextView02"
+            android:text="@string/error"
+            android:textStyle="bold"
+            android:typeface="serif" >
+	</TextView>  
 
-        <TableRow
-            android:id="@+id/tableRow5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
+        <TextView
+            android:id="@+id/TextView01"
+            android:text="@string/satelites"
+            android:textStyle="bold"
+            android:typeface="serif" >
+	</TextView>  
 
+        <TextView
+            android:id="@+id/textView1"
+            android:text="@string/proveedor"
+            android:textStyle="bold"
+            android:typeface="serif" >
+	</TextView>
+  
+    </TableRow>  
+     
     </TableLayout>
 
 </RelativeLayout>

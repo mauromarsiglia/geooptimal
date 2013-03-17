@@ -1,128 +1,93 @@
 package com.test.geo.optimal;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
-import android.widget.ImageView;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.test.geo.optimal.library.Muestra;
+import com.test.geo.optimal.persistence.SQLiteManager;
+import com.test.geo.optimal.threads.OnClicTableRow;
+
 public class Results extends Activity {
+
+	private static final String TAG = "RESULTS";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_results);
-		
-		/*TableLayout table = (TableLayout) findViewById(R.id.table);
-	    table.setStretchAllColumns(true);  
-	    table.setShrinkAllColumns(true);  
-	    
-	    TableRow rowTitle = new TableRow(this);  
-	    rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    TableRow rowDayLabels = new TableRow(this);  
-	    TableRow rowHighs = new TableRow(this);  
-	    
-	    
-	    TextView empty = new TextView(this);  
-	   
-	    // title column/row  
-	    TextView title = new TextView(this);  
-	    title.setText("Resultados de muestras");  
-	    title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);  
-	    title.setGravity(Gravity.CENTER);  
-	    title.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    TableRow.LayoutParams params = new TableRow.LayoutParams();  
-	    params.span = 6;  
-	    rowTitle.addView(title, params);  
-	    
-	    
-	    // day 1 column  
-	    TextView day1Label = new TextView(this);  
-	    day1Label.setText("Feb 7");  
-	    day1Label.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    
-	    TextView day1High = new TextView(this);  
-	    day1High.setText("28°F");  
-	    day1High.setGravity(Gravity.CENTER_HORIZONTAL);  
-	      
-	    rowDayLabels.addView(day1Label);  
-	    rowHighs.addView(day1High);  
-	      
-	    // day2 column  
-	    TextView day2Label = new TextView(this);  
-	    day2Label.setText("Feb 8");  
-	    day2Label.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    TextView day2High = new TextView(this);  
-	    day2High.setText("26°F");  
-	    day2High.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    TextView day2Low = new TextView(this);  
-	    day2Low.setText("14°F");  
-	    day2Low.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    ImageView day2Conditions = new ImageView(this);  
-	    day2Conditions.setImageResource(R.drawable.push_pin);  
-	    rowDayLabels.addView(day2Label);  
-	    rowHighs.addView(day2High);  
-	      
-	    // day3 column  
-	    TextView day3Label = new TextView(this);  
-	    day3Label.setText("Feb 9");  
-	    day3Label.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    TextView day3High = new TextView(this);  
-	    day3High.setText("23°F");  
-	    day3High.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    TextView day3Low = new TextView(this);  
-	    day3Low.setText("3°F");  
-	    day3Low.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    ImageView day3Conditions = new ImageView(this);  
-	    day3Conditions.setImageResource(R.drawable.ic_launcher);  
-	    rowDayLabels.addView(day3Label);  
-	    rowHighs.addView(day3High);  
-	    rowLows.addView(day3Low);  
-	    rowConditions.addView(day3Conditions);  
-	    // day4 column  
-	    TextView day4Label = new TextView(this);  
-	    day4Label.setText("Feb 10");  
-	    day4Label.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    TextView day4High = new TextView(this);  
-	    day4High.setText("17°F");  
-	    day4High.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    TextView day4Low = new TextView(this);  
-	    day4Low.setText("5°F");  
-	    day4Low.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    ImageView day4Conditions = new ImageView(this);  
-	    day4Conditions.setImageResource(R.drawable.push_pin);  
-	    rowDayLabels.addView(day4Label);  
-	    rowHighs.addView(day4High);  
-	    rowLows.addView(day4Low);  
-	    rowConditions.addView(day4Conditions);  
-	    // day5 column  
-	    TextView day5Label = new TextView(this);  
-	    day5Label.setText("Feb 11");  
-	    day5Label.setTypeface(Typeface.SERIF, Typeface.BOLD);  
-	    TextView day5High = new TextView(this);  
-	    day5High.setText("19°F");  
-	    day5High.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    TextView day5Low = new TextView(this);  
-	    day5Low.setText("6°F");  
-	    day5Low.setGravity(Gravity.CENTER_HORIZONTAL);  
-	    ImageView day5Conditions = new ImageView(this);  
-	    day5Conditions.setImageResource(R.drawable.ic_launcher);  
-	    rowDayLabels.addView(day5Label);  
-	    rowHighs.addView(day5High);  
-	    rowLows.addView(day5Low);  
-	    rowConditions.addView(day5Conditions);  
-	    
-	    table.addView(rowTitle);  
-	    table.addView(rowDayLabels);  
-	    table.addView(rowHighs);  
-	    table.addView(rowLows);  
-	    table.addView(rowConditions);  */
-	    
+
+		TableLayout table = (TableLayout) findViewById(R.id.table);
+		table.setStretchAllColumns(true);
+		table.setShrinkAllColumns(true);
+
+		List<Muestra> muestras = SQLiteManager.getInstance().getAll(this);
+		Log.i("CANTIDAD", muestras.size() + "");
+		for (final Muestra muestra : muestras) {
+
+			TableRow newRow = new TableRow(this);
+
+			newRow.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					new OnClicTableRow(v).start();
+					cambiarActivity(muestra);
+				}
+			});
+			TextView day1High = new TextView(this);
+			day1High.setText(muestra.getLatitude());
+			day1High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day1High);
+
+			TextView day2High = new TextView(this);
+			day2High.setText(muestra.getLonguitude() + "");
+			day2High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day2High);
+
+			TextView day3High = new TextView(this);
+			day3High.setText(muestra.getCalificacion() + "");
+			day3High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day3High);
+
+			TextView day4High = new TextView(this);
+			day4High.setText(muestra.getPrecision() + "");
+			day4High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day4High);
+
+			TextView day5High = new TextView(this);
+			day5High.setText(muestra.getNumeroSatelites() + "");
+			day5High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day5High);
+
+			TextView day6High = new TextView(this);
+			day6High.setText(muestra.getProviderName());
+			day6High.setGravity(Gravity.CENTER_HORIZONTAL);
+
+			newRow.addView(day6High);
+
+			table.addView(newRow);
+		}
+
+	}
+
+	private void cambiarActivity(Muestra muestra) {
+		Log.i(TAG, muestra.getDescripcion());
 	}
 
 	@Override
