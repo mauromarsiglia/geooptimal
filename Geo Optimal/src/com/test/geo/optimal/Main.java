@@ -18,15 +18,19 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -53,11 +57,13 @@ public class Main extends MapActivity{
 	private TextView latitud;
 	private TextView precision;
 	private TextView satelites;
+	private EditText descripcion;
 	private ImageButton Localizar;
 	private Button mala;
 	private Button buena;
 	private Button excelente;
 	private LinearLayout votar;
+	private LinearLayout contendor_descripcion;
 	
 	private LocationManager locManager;
 	private LocationListener locListener;
@@ -83,7 +89,7 @@ public class Main extends MapActivity{
         this.mala= (Button) findViewById(R.id.mala);
         this.buena= (Button) findViewById(R.id.buena);
         this.excelente= (Button) findViewById(R.id.excelente);
-        
+        this.descripcion= (EditText) findViewById(R.id.descripcion);
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
         itemizedOverlay = new MyOverlay(drawable, this);
@@ -97,6 +103,8 @@ public class Main extends MapActivity{
 				mostrarUbicacionMapa();
 				votar=(LinearLayout)findViewById(R.id.votar);
 				votar.setVisibility(View.VISIBLE);
+				contendor_descripcion=(LinearLayout)findViewById(R.id.conteneror_descripcion);
+				contendor_descripcion.setVisibility(View.VISIBLE);
 			}
 		});
         
@@ -128,14 +136,65 @@ public class Main extends MapActivity{
 	}
 	
 	private void agregarMuestra(int calificacion){
-		guardarImagen();
-		Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,numero_satelites,calificacion,"",guardarImagen());
-		SQLiteManager.getInstance().saveMuestra(muestra, this);
+		boolean guardar=true;
+		String mensaje="";
 		
-		for(Muestra m:SQLiteManager.getInstance().getAll(this)){
-			Log.i(TAG,m.getCalificacion()+"");
+		
+		String des  =descripcion.getText().toString();
+		if(des.trim().length()<4){
+			guardar=false;
+			mensaje="Por favor agrege descripcion";
 		}
+		
+		if(latitud_actual==0.0){
+			guardar=false;
+			mensaje="No se ha podido obtener ubicacion";
+		}
+		
+		if(guardar){
+			mensaje="Guardado exitosamente";
+			String path_imagen=guardarImagen();		
+			Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,numero_satelites,calificacion,des,path_imagen);
+			SQLiteManager.getInstance().saveMuestra(muestra, this);
+	
+			for(Muestra m:SQLiteManager.getInstance().getAll(this)){
+				Log.i(TAG,m.getDescripcion());
+		
+			}
+			reiniciar();
+		}
+
+			Toast toast2 =
+	            Toast.makeText(getApplicationContext(),
+	                    mensaje, Toast.LENGTH_SHORT);
+	 
+	        toast2.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
+	 
+	        toast2.show();
+	
 	}
+	
+	private void reiniciar(){
+		latitud_actual=0.0;
+		longitud_actual=0.0;
+		precision_actual=0.0;
+		numero_satelites=0;
+		latitud.setText("");
+		longitud.setText("");
+		precision.setText("");
+		satelites.setText("");
+		votar.setVisibility(View.GONE);
+		contendor_descripcion.setVisibility(View.GONE);
+		descripcion.setText("");
+		mapa.invalidate();
+	    mapa.postInvalidate();
+	    for (int i=0; i<mapa.getOverlays().size(); i++ ) {
+	        mapa.getOverlays().remove(i);
+	    }
+	    Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
+        itemizedOverlay = new MyOverlay(drawable, this);
+	}
+	
 	
 	private String guardarImagen(){
 
@@ -181,6 +240,8 @@ public class Main extends MapActivity{
 			    	proveedor=location.getProvider();
 			    	precision_actual=location.getAccuracy();
 			    	numero_satelites=location.getExtras().getInt("satellites");
+			    	Main.this.
+			    	currentBestLocation=location;
 		    	}else{
 		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
 			    	latitud_actual = Main.this.currentBestLocation.getLatitude();
@@ -188,7 +249,11 @@ public class Main extends MapActivity{
 			    	precision_actual=Main.this.currentBestLocation.getAccuracy();
 			    	numero_satelites=Main.this.currentBestLocation.getExtras().getInt("satellites");
 		    	}
-		    	
+		    	latitud.setText("Latitud: " + String.valueOf(latitud_actual));
+	    		longitud.setText("Longitud: " + String.valueOf(longitud_actual));
+	    		precision.setText("Precision: " + String.valueOf(precision_actual) +" m");
+	    		satelites.setText("# satelites: " + String.valueOf(numero_satelites) );
+	    		
 		    	Log.i(TAG, "-------------------------------------------------");
 		    	Log.i(TAG,"longitud:"+longitud_actual);
 		    	Log.i(TAG,"latitud:"+latitud_actual);
@@ -229,7 +294,8 @@ public class Main extends MapActivity{
  		MapController mapController = mapa.getController();
  		
  		mapController.animateTo(point);
- 	//	mapController.setZoom(20);
+ 		mapController.setZoom(20);
+ 		
 
 	}
 	

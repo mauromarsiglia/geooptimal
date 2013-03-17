@@ -8,67 +8,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Main" >
 
-    <LinearLayout
-        android:id="@+id/votar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/mapa"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/mala"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mala" />
-
-        <Button
-            android:id="@+id/buena"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buena" />
-
-        <Button
-            android:id="@+id/excelente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/excelente" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/satelites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="# de satelites" />
-
     <com.google.android.maps.MapView
         android:id="@+id/mapa"
         android:layout_width="fill_parent"
         android:layout_height="250dp"
-        android:layout_alignLeft="@+id/votar"
-        android:layout_below="@+id/satelites"
         android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
         android:clickable="true" >
     </com.google.android.maps.MapView>
 
-    <ImageButton
-        android:id="@+id/localizar"
+    <LinearLayout
+        android:id="@+id/contenedor_localizar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/mapa"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/linearLayout1"
-        android:src="@drawable/push_pin" />
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@+id/localizar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/push_pin" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/mapa"
+        android:layout_width="fill_parent"
+        android:layout_height="115sp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="34dp"
         android:orientation="vertical" >
 
         <TextView
@@ -89,6 +57,61 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="precision" />
+
+        <TextView
+            android:id="@+id/satelites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="# de satelites" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/conteneror_descripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mapa"
+        android:layout_alignRight="@+id/mapa"
+        android:layout_below="@+id/mapa"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <EditText
+            android:id="@+id/descripcion"
+            android:layout_width="fill_parent"
+            android:layout_height="50sp"
+            android:ems="10"
+            android:hint="@string/description" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/votar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/conteneror_descripcion"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/mala"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mala" />
+
+        <Button
+            android:id="@+id/buena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buena" />
+
+        <Button
+            android:id="@+id/excelente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/excelente" />
     </LinearLayout>
 
 </RelativeLayout>

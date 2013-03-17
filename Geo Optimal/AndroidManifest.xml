@@ -22,7 +22,8 @@
  
         <activity
             android:name="com.test.geo.optimal.Main"
-            android:label="Geo Optimal" >
+            android:label="Geo Optimal" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
