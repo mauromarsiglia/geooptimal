@@ -20,9 +20,9 @@ public class TableManager extends SQLiteOpenHelper {
 		super(context, name, factory, version);
 		// TODO Auto-generated constructor stub
 	}
-
-	private String sqlCreate = "CREATE TABLE muestra (lat TEXT, long TEXT, calificacion INTEGER, " +
-			"descripcion TEXT, path_imagen TEXT);";
+	
+	private String sqlCreate = "CREATE TABLE muestra (latitude TEXT, longuitude TEXT, precision REAL, providerName TEXT, " +
+			"numeroSatelites INTEGER, calificacion INTEGER, descripcion TEXT, path_imagen TEXT);";
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
