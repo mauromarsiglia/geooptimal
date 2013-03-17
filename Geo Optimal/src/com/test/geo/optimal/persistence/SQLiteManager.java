@@ -27,9 +27,9 @@ public class SQLiteManager {
 	/**
 	 * Singleton
 	 */
-	private SQLiteManager instance;
+	private static SQLiteManager instance;
 	
-	public SQLiteManager getInstance(){
+	public static SQLiteManager getInstance(){
 		if(instance==null){
 			instance = new SQLiteManager();
 		}
