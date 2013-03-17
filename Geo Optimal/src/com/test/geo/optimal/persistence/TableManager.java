@@ -31,7 +31,7 @@ public class TableManager extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int versionAnterior, int versionNueva) {
-		db.execSQL("DROP TABLE IF EXISTS jugador");
+		db.execSQL("DROP TABLE IF EXISTS muestra");
 		db.execSQL(sqlCreate);
 	}
 
