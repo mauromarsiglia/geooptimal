@@ -12,5 +12,7 @@
     <string name="excelente">Excelente</string>
     <string name="description">Descripcion</string>
     <string name="descripcion">Ingrese Description</string>
+    <string name="title_activity_results">Results</string>
+    <string name="result">resultados</string>
 
 </resources>

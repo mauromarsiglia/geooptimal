@@ -44,7 +44,7 @@ public class SQLiteManager {
 	 */
 	public void saveMuestra(Muestra muestra, Context context){
 		
-		this.manager = new TableManager(context, "muestreo", null, 1);
+		this.manager = new TableManager(context, "muestreo", null, 2);
 		this.db = this.manager.getWritableDatabase();
         this.db.execSQL("INSERT INTO muestra (latitude, longuitude, precision, providerName, numeroSatelites, " +
 			"calificacion, descripcion, path_imagen) VALUES('"+muestra.getLatitude()+"', " +
@@ -57,6 +57,16 @@ public class SQLiteManager {
 	
 	}
 	
+	public void deleteDB(Context context){
+		
+		this.manager = new TableManager(context, "muestreo", null, 1);
+		this.db = this.manager.getWritableDatabase();
+        this.db.execSQL("DELETE FROM muestra;");
+        this.db.close();
+	
+	}
+	
+	
 	/**
 	 * 
 	 * @param context
@@ -64,7 +74,7 @@ public class SQLiteManager {
 	 */
 	public List<Muestra> getAll(Context context){
 		
-		this.manager = new TableManager(context, "muestreo", null, 1);
+		this.manager = new TableManager(context, "muestreo", null, 2);
 		this.db = this.manager.getWritableDatabase();
 		Cursor c = db.rawQuery("SELECT * FROM muestra;",null);
 		this.listaMuestras.clear();
@@ -78,7 +88,7 @@ public class SQLiteManager {
 		}
 		
 		this.db.close();
-		com.test.geo.optimal.controller.Statistical.getInstance().saveEstadistica(this.listaMuestras);
+		com.test.geo.optimal.controller.Metadatos.getInstance().saveEstadistica(this.listaMuestras);
 		
 		return this.listaMuestras;
 		

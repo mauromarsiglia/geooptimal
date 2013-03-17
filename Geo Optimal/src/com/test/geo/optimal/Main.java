@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -30,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -62,6 +62,8 @@ public class Main extends MapActivity{
 	private Button mala;
 	private Button buena;
 	private Button excelente;
+	private Button resultados;
+	
 	private LinearLayout votar;
 	private LinearLayout contendor_descripcion;
 	
@@ -90,6 +92,8 @@ public class Main extends MapActivity{
         this.buena= (Button) findViewById(R.id.buena);
         this.excelente= (Button) findViewById(R.id.excelente);
         this.descripcion= (EditText) findViewById(R.id.descripcion);
+        this.resultados = (Button) findViewById(R.id.resultados);
+        
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
         itemizedOverlay = new MyOverlay(drawable, this);
@@ -132,7 +136,21 @@ public class Main extends MapActivity{
 			}
 		});
         
+        resultados.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				verResultados();
+			}
+		});	
+        
         //localizar();
+	}
+	
+	private void verResultados(){
+		Intent intent = new Intent(this,Results.class);
+		
+		startActivity(intent);
 	}
 	
 	private void agregarMuestra(int calificacion){
