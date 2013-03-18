@@ -16,7 +16,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-
 import com.test.geo.optimal.library.Muestra;
 import com.test.geo.optimal.persistence.SQLiteManager;
 
@@ -28,21 +27,13 @@ public class Results extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_results);
-
-		
-
+		llenarTabla();
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
+	
+	private void llenarTabla(){
 		TableLayout table = (TableLayout) findViewById(R.id.table);
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
-
-		// Muestra muestra = new Muestra("11111	", "11111322", 0, "5545", 0, 0,
-		// "", "");
 
 		List<Muestra> muestras = SQLiteManager.getInstance().getAll(this);
 		Log.i("CANTIDAD", muestras.size() + "");
@@ -56,6 +47,7 @@ public class Results extends Activity {
 				@Override
 				public void onClick(View v) {
 					v.setBackgroundColor(Color.GRAY);
+					
 					Handler handler  = new Handler();
 					handler.postDelayed(cambiarActivity(muestra,v), 1000);
 					
@@ -100,6 +92,13 @@ public class Results extends Activity {
 			table.addView(newRow);
 		}
 	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		
+	}
 	private Runnable cambiarActivity(final Muestra muestra, final View v) {
 		Runnable runnable = new Runnable(){
 			@Override
@@ -111,6 +110,7 @@ public class Results extends Activity {
 		return runnable;
 	}
 	private void cambiarActivity2(Muestra muestra){
+		Log.i(TAG, muestra.getPrecision()+"");
 		Intent intent = new Intent();
 		intent.setClass(this, DetalleMuestra.class);
 		intent.putExtra("latitud", muestra.getLatitude());
@@ -119,6 +119,7 @@ public class Results extends Activity {
 		intent.putExtra("precision", muestra.getPrecision());
 		intent.putExtra("satelites", muestra.getNumeroSatelites());
 		intent.putExtra("proveedor", muestra.getProviderName());
+		intent.putExtra("imagen", muestra.getPathImagen());
 		startActivity(intent);
 	}
 	

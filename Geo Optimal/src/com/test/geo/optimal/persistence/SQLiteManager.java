@@ -59,7 +59,7 @@ public class SQLiteManager {
 	
 	public void deleteDB(Context context){
 		
-		this.manager = new TableManager(context, "muestreo", null, 1);
+		this.manager = new TableManager(context, "muestreo", null, 2);
 		this.db = this.manager.getWritableDatabase();
         this.db.execSQL("DELETE FROM muestra;");
         this.db.close();

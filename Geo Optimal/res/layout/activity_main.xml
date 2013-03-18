@@ -12,7 +12,7 @@
         android:id="@+id/mapa"
         android:layout_width="fill_parent"
         android:layout_height="250dp"
-        android:apiKey="0-ltoy22TLP-LYptdqk8X_2y5SPFAo4xhMOpPUg"
+        android:apiKey="0-ltoy22TLP9UcSDLv_0ImvCHRPWiGzq_1_-yJA"
         android:clickable="true" >
     </com.google.android.maps.MapView>
 

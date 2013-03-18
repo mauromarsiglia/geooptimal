@@ -1,12 +1,25 @@
 package com.test.geo.optimal;
 
-import android.os.Bundle;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.UUID;
+
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DetalleMuestra extends Activity {
 
+	private static final String TAG="DETALLEMUESTA";
 	private static TextView longitud;
 	private static TextView latitud;
 	private static TextView calificacion;
@@ -16,9 +29,11 @@ public class DetalleMuestra extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_muestra);
 		Bundle bundle = getIntent().getExtras();
+		
 		longitud = (TextView) findViewById(R.id.longitud_muestra);
 		latitud= (TextView) findViewById(R.id.latitud_muestra);
 		calificacion= (TextView) findViewById(R.id.calificacion_muestra);
@@ -26,13 +41,14 @@ public class DetalleMuestra extends Activity {
 		satelites= (TextView) findViewById(R.id.satelites_muestra);
 		proveedor= (TextView) findViewById(R.id.proveedor_muestra);
 		
-		
 		longitud.setText("Longitud: "+bundle.getString("longitud"));
 		latitud.setText("Latitud: "+bundle.getString("latitud"));
 		calificacion.setText("Calificacion: "+bundle.getInt("calificacion"));
-		error.setText("Precision: "+bundle.getInt("precision"));
+		error.setText("Precision: "+bundle.getDouble("precision"));
 		satelites.setText("# de satelites: "+bundle.getInt("satelites"));
 		proveedor.setText("Proveedor : "+bundle.getString("proveedor"));
+		Log.i(TAG,bundle.getString("imagen"));
+		abrirImagen(bundle.getString("imagen"));
 		
 	}
 
@@ -41,6 +57,30 @@ public class DetalleMuestra extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.muestra, menu);
 		return true;
+	}
+	
+	private void abrirImagen(String nombre){
+
+       
+        //Bitmap b = imagen;
+
+        File sd = Environment.getExternalStorageDirectory();
+        String the_path = Environment.getExternalStorageDirectory()
+        			+ File.separator + "prohibidoparquear";
+
+      	String the_file = the_path + File.separator +  nombre +".jpg";
+
+        File f = new File(the_file);
+          
+        if(f.exists()){
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+
+            ImageView myImage = (ImageView) findViewById(R.id.imagen_muestra);
+            myImage.setImageBitmap(myBitmap);
+
+        }
+          
 	}
 
 }

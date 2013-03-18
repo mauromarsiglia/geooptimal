@@ -18,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -68,8 +69,9 @@ public class Main extends MapActivity{
 	private LinearLayout votar;
 	private LinearLayout contendor_descripcion;
 	
-	private LocationManager locManager;
-	private LocationListener locListener;
+	private LocationManager locationManager;
+	private LocationListener locationListener;
+	
 	
 	MyOverlay itemizedOverlay;
 	private View viewToBeCaptured;
@@ -78,8 +80,11 @@ public class Main extends MapActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
 		setContentView(R.layout.activity_main);
 	
+		
         mapa = (MapView)findViewById(R.id.mapa);
 
         mapa.setBuiltInZoomControls(true);
@@ -99,18 +104,76 @@ public class Main extends MapActivity{
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
         itemizedOverlay = new MyOverlay(drawable, this);
-
-        obtenerUbicacion();
+        
+        
+        
         
         Localizar.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				mostrarUbicacionMapa();
-				votar=(LinearLayout)findViewById(R.id.votar);
-				votar.setVisibility(View.VISIBLE);
-				contendor_descripcion=(LinearLayout)findViewById(R.id.conteneror_descripcion);
-				contendor_descripcion.setVisibility(View.VISIBLE);
+				
+				obtenerUbicacion();
+				
+				Handler handler  = new Handler();
+				handler.postDelayed(guardarUbicacion(), 1000 * 60);
+				
+				/*Runnable run = new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						
+						obtenerUbicacion();
+						
+						try {
+							Thread.sleep(60 * 1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						locationManager.removeUpdates(locationListener);
+						mostrarUbicacionMapa();
+						
+						votar = (LinearLayout)findViewById(R.id.votar);
+						votar.setVisibility(View.VISIBLE);
+						
+						contendor_descripcion=(LinearLayout)findViewById(R.id.conteneror_descripcion);
+						contendor_descripcion.setVisibility(View.VISIBLE);
+						
+					}
+					
+				};
+				
+				
+				Thread hilo = new Thread(run);
+				hilo.start();*/
+				
+				
+			}
+
+			private Runnable guardarUbicacion() {
+				// TODO Auto-generated method stub
+				
+				return new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						
+						locationManager.removeUpdates(locationListener);
+						mostrarUbicacionMapa();
+						
+						votar = (LinearLayout)findViewById(R.id.votar);
+						votar.setVisibility(View.VISIBLE);
+						
+						contendor_descripcion=(LinearLayout)findViewById(R.id.conteneror_descripcion);
+						contendor_descripcion.setVisibility(View.VISIBLE);
+						
+					}
+					
+				};
 			}
 		});
         
@@ -155,6 +218,10 @@ public class Main extends MapActivity{
 		});
         
         //localizar();
+	}
+	
+	public void onResume(){
+		super.onResume();
 	}
 	
 	private void verResultados(){
@@ -259,45 +326,51 @@ public class Main extends MapActivity{
 	}
 	private void obtenerUbicacion(){
 
-		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 				
-		LocationListener locationListener = new LocationListener() {
+		this.locationListener = new LocationListener() {
+			
 		    public void onLocationChanged(Location location) {
+		    	
 		    	Log.i(TAG, "-------------------------------------------------");
 		    	Log.i(TAG,location.getExtras().getInt("satellites")+"");
 		    	Log.i(TAG, "-------------------------------------------------");
+		    	
 		    	if(isBetterLocation(location, Main.this.currentBestLocation)){
+		    		
 		    		longitud_actual= location.getLongitude();
 			    	latitud_actual = location.getLatitude();
 			    	proveedor=location.getProvider();
 			    	precision_actual=location.getAccuracy();
 			    	numero_satelites=location.getExtras().getInt("satellites");
-			    	Main.this.
-			    	currentBestLocation=location;
+			    	
+			    	Main.this.currentBestLocation=location;
+			    	
+			    	latitud.setText("Latitud: " + String.valueOf(latitud_actual));
+		    		longitud.setText("Longitud: " + String.valueOf(longitud_actual));
+		    		precision.setText("Precision: " + String.valueOf(precision_actual) +" m");
+		    		satelites.setText("# satelites: " + String.valueOf(numero_satelites) );
+		    		
+			    	Log.i(TAG, "-------------------------------------------------");
+			    	Log.i(TAG,"longitud:"+longitud_actual);
+			    	Log.i(TAG,"latitud:"+latitud_actual);
+			    	Log.i(TAG, "-------------------------------------------------");
 		    	}else{
+		    		
 		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
 			    	latitud_actual = Main.this.currentBestLocation.getLatitude();
 			    	proveedor=Main.this.currentBestLocation.getProvider();
 			    	precision_actual=Main.this.currentBestLocation.getAccuracy();
 			    	numero_satelites=Main.this.currentBestLocation.getExtras().getInt("satellites");
+			    	
 		    	}
-		    	latitud.setText("Latitud: " + String.valueOf(latitud_actual));
-	    		longitud.setText("Longitud: " + String.valueOf(longitud_actual));
-	    		precision.setText("Precision: " + String.valueOf(precision_actual) +" m");
-	    		satelites.setText("# satelites: " + String.valueOf(numero_satelites) );
-	    		
-		    	Log.i(TAG, "-------------------------------------------------");
-		    	Log.i(TAG,"longitud:"+longitud_actual);
-		    	Log.i(TAG,"latitud:"+latitud_actual);
-		    	Log.i(TAG, "-------------------------------------------------");
+		    	
+		    
 		    	
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {
-		    	/*Log.i(TAG, "-------------------------------------------------");
-		    	Log.i(TAG, extras+"");
-		    	Log.i(TAG, extras.getInt("satellites")+"");
-		    	Log.i(TAG, "-------------------------------------------------");*/
+		    	
 		    }
 
 		    public void onProviderEnabled(String provider) {}
@@ -306,11 +379,16 @@ public class Main extends MapActivity{
 		  };
 
 
-		//locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		
+		
+		
+		
 	}
 	
 	public void mostrarUbicacionMapa(){
+		
 		List<Overlay> mapOverlays = mapa.getOverlays();
     	
 		Log.i(TAG, longitud_actual+","+latitud_actual);
@@ -328,7 +406,6 @@ public class Main extends MapActivity{
  		mapController.animateTo(point);
  		mapController.setZoom(20);
  		
-
 	}
 	
 	
@@ -346,135 +423,39 @@ public class Main extends MapActivity{
 		return false;
 	}
 	
-	
-	/*
-	private void localizar()
-    {
-
-    	locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-    	
-    	Location loc = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    	
-    	
-    	mostrarPosicion(loc);
-    	
-    	
-    	locListener = new LocationListener() {
-    		
-	    	public void onLocationChanged(Location location) {
-	    		mostrarPosicion(location);
-	    	}
-	    	public void onProviderDisabled(String provider){
-	    		
-	    	}
-	    	public void onProviderEnabled(String provider){
-	    		
-	    	}
-	    	public void onStatusChanged(String provider, int status, Bundle extras){
-	    		Log.i("", "Provider Status: " + status);
-	    	}
-    	};
-    	
-    	locManager.requestLocationUpdates(
-    			LocationManager.GPS_PROVIDER, 30000, 0, locListener);
-    	
-    }
-     
-    private void mostrarPosicion(Location loc) {
-    	
-    	if(loc != null)
-    	{
-	    		longitud_actual= loc.getLongitude();
-	    		latitud_actual=loc.getLatitude();
-	    		precision_actual=loc.getAccuracy();
-	    		mostrarPosicion();
-	    		
-	    		latitud.setText("Latitud: " + String.valueOf(loc.getLatitude()));
-	    		longitud.setText("Longitud: " + String.valueOf(loc.getLongitude()));
-	    		precision.setText("Precision: " + String.valueOf(loc.getAccuracy()) +" m");
-	    		Log.i("", String.valueOf(loc.getLatitude() + " - " + String.valueOf(loc.getLongitude())));
-    	}else
-    	{
-    		latitud.setText("Latitud: (sin_datos)");
-    		longitud.setText("Longitud: (sin_datos)");
-    		
-    	}
-    }
-    
-    private void mostrarPosicion(){
-    	
-    	List<Overlay> mapOverlays = mapa.getOverlays();
-    	mapOverlays.clear();
-    	
- 		GeoPoint point = new GeoPoint((int)(latitud_actual* 1E6), (int)(longitud_actual* 1E6));
- 		
- 		OverlayItem overlayitem = new OverlayItem(point, "Hola",
- 				"!Precision!" + precision.getText());
-  
- 		itemizedOverlay.addOverlay(overlayitem);
- 		mapOverlays.add(itemizedOverlay);
- 		
- 		
- 		MapController mapController = mapa.getController();
- 		
- 		mapController.animateTo(point);
- 		mapController.setZoom(20);
- 		mapa.invalidate();
- 		
- 		GpsStatus gpsstatus = this.locManager.getGpsStatus(null);
-    	Iterable<GpsSatellite> satelitess = gpsstatus.getSatellites();
-    	
-    	int nSatelites = 0;
-    	
-    	for(GpsSatellite gpssatelites : satelitess){
-    		nSatelites++;
-    	}
-    	
-    	Log.i(TAG, "nSatelites: "+nSatelites);
-    	this.satelites.setText(""+nSatelites);
- 		
-    }
-    */
-    
-	
 	private static final int THIRTY_SECONDS = 1000 * 30;
 
-	/** Determines whether one Location reading is better than the current Location fix
-	  * @param location  The new Location that you want to evaluate
-	  * @param currentBestLocation  The current Location fix, to which you want to compare the new one
-	  */
+	
 	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
-	    if (currentBestLocation == null) {
-	        // A new location is always better than no location
+	    
+		if (currentBestLocation == null) {
 	        return true;
 	    }
 
-	    // Check whether the new location fix is newer or older
+
 	    long timeDelta = location.getTime() - currentBestLocation.getTime();
 	    boolean isSignificantlyNewer = timeDelta > THIRTY_SECONDS;
 	    boolean isSignificantlyOlder = timeDelta < -THIRTY_SECONDS;
 	    boolean isNewer = timeDelta > 0;
 
-	    // If it's been more than two minutes since the current location, use the new location
-	    // because the user has likely moved
+	    
 	    if (isSignificantlyNewer) {
 	        return true;
-	    // If the new location is more than two minutes older, it must be worse
 	    } else if (isSignificantlyOlder) {
 	        return false;
 	    }
 
-	    // Check whether the new location fix is more or less accurate
+	 
 	    int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
 	    boolean isLessAccurate = accuracyDelta > 0;
 	    boolean isMoreAccurate = accuracyDelta < 0;
 	    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
 
-	    // Check if the old and new location are from the same provider
+	
 	    boolean isFromSameProvider = isSameProvider(location.getProvider(),
 	            currentBestLocation.getProvider());
 
-	    // Determine location quality using a combination of timeliness and accuracy
+	
 	    if (isMoreAccurate) {
 	        return true;
 	    } else if (isNewer && !isLessAccurate) {
@@ -485,7 +466,7 @@ public class Main extends MapActivity{
 	    return false;
 	}
 
-	/** Checks whether two providers are the same */
+	
 	private boolean isSameProvider(String provider1, String provider2) {
 	    if (provider1 == null) {
 	      return provider2 == null;
@@ -493,7 +474,13 @@ public class Main extends MapActivity{
 	    return provider1.equals(provider2);
 	}
 		
-	
+	@Override
+	public void onStop(){
+		super.onStop();
+		if(locationManager!=null){
+			this.locationManager.removeUpdates(this.locationListener);
+		}
+	}
 	
 
 }

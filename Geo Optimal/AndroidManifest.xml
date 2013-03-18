@@ -32,7 +32,7 @@
         <activity
             android:name="com.test.geo.optimal.Results"
             android:label="@string/title_activity_results"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="sensorLandscape" >
         </activity>
         <activity
             android:name="com.test.geo.optimal.DetalleMuestra"

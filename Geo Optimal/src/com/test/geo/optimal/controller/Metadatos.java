@@ -118,10 +118,10 @@ public class Metadatos {
 				
 				if(item.getProviderName().equals(LocationManager.GPS_PROVIDER)){
 					this.count_malas_gps++;
-					this.count_total_veces_gps += item.getNumeroSatelites(); 
+					this.count_total_veces_gps++; 
 				}else{
 					this.count_malas_net++;
-					this.count_total_veces_net += item.getNumeroSatelites();
+					this.count_total_veces_net++;
 				}
 				
 			}else if(item.getCalificacion() == Muestra.BUENA){
@@ -132,10 +132,10 @@ public class Metadatos {
 				
 				if(item.getProviderName().equals(LocationManager.GPS_PROVIDER)){
 					this.count_buenas_gps++;
-					this.count_total_veces_gps += item.getNumeroSatelites(); 
+					this.count_total_veces_gps++;; 
 				}else{
 					this.count_buenas_net++;
-					this.count_total_veces_net += item.getNumeroSatelites();
+					this.count_total_veces_net++;
 				}
 				
 			}else{
@@ -146,10 +146,10 @@ public class Metadatos {
 				
 				if(item.getProviderName().equals(LocationManager.GPS_PROVIDER)){
 					this.count_excelentes_gps++;
-					this.count_total_veces_gps += item.getNumeroSatelites(); 
+					this.count_total_veces_gps++; 
 				}else{
 					this.count_excelentes_net++;
-					this.count_total_veces_net += item.getNumeroSatelites();
+					this.count_total_veces_net++;
 				}
 				
 			}
@@ -162,37 +162,37 @@ public class Metadatos {
 		//conteo
 		int size = listaMuestras.size();
 		if(size>0){
-			this.malas = count_malas / size;
-			this.buenas = count_buenas / size;
-			this.excelentes = count_excelentes / size;
+			this.malas = count_malas*100 / size;
+			this.buenas = count_buenas*100 / size;
+			this.excelentes = count_excelentes*100 / size;
 		}
 		
 		if(this.total_error > 0){
 			//precision
-			this.prom_error_malas = this.count_error_malas / this.total_error;
-			this.prom_error_buenas = this.count_error_buenas / this.total_error;
-			this.prom_error_excelentes = this.count_error_excelentes / this.total_error;
+			this.prom_error_malas = this.count_error_malas*100 / this.total_error;
+			this.prom_error_buenas = this.count_error_buenas*100 / this.total_error;
+			this.prom_error_excelentes = this.count_error_excelentes*100 / this.total_error;
 		}
 		
 		if(this.total_satelites > 0){
 			//satelites
-			this.prom_malas_satelites = this.count_malas_satelites / this.total_satelites;
-			this.prom_buenas_satelites = this.count_buenas_satelites / this.total_satelites;
-			this.prom_excelentes_satelites = this.count_excelentes_satelites / this.total_satelites;
+			this.prom_malas_satelites = this.count_malas_satelites*100 / this.total_satelites;
+			this.prom_buenas_satelites = this.count_buenas_satelites*100 / this.total_satelites;
+			this.prom_excelentes_satelites = this.count_excelentes_satelites*100 / this.total_satelites;
 		}
 		
 		if(this.count_total_veces_gps > 0){
 			//proveedores gps
-			this.prom_malas_gps = this.count_malas_gps / this.count_total_veces_gps;
-			this.prom_buenas_gps = this.count_buenas_gps / this.count_total_veces_gps;
-			this.prom_excelentes_gps = this.count_excelentes_gps / this.count_total_veces_gps;
+			this.prom_malas_gps = this.count_malas_gps*100 / this.count_total_veces_gps;
+			this.prom_buenas_gps = this.count_buenas_gps*100 / this.count_total_veces_gps;
+			this.prom_excelentes_gps = this.count_excelentes_gps*100 / this.count_total_veces_gps;
 		}
 		
 		if(this.count_total_veces_net > 0){
 			//proveedores net
-			this.prom_malas_net = this.count_malas_net / this.count_total_veces_net;
-			this.prom_buenas_net = this.count_buenas_net / this.count_total_veces_net;
-			this.prom_excelentes_net = this.count_excelentes_net / this.count_total_veces_net;
+			this.prom_malas_net = this.count_malas_net*100 / this.count_total_veces_net;
+			this.prom_buenas_net = this.count_buenas_net*100 / this.count_total_veces_net;
+			this.prom_excelentes_net = this.count_excelentes_net*100 / this.count_total_veces_net;
 		}
 		
 	}
