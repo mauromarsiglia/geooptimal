@@ -31,7 +31,9 @@ public class Results extends Activity {
 	}
 	
 	private void llenarTabla(){
+		
 		TableLayout table = (TableLayout) findViewById(R.id.table);
+		
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
 
