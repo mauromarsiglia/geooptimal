@@ -3,8 +3,10 @@ package com.test.geo.optimal;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -14,9 +16,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+
 import com.test.geo.optimal.library.Muestra;
 import com.test.geo.optimal.persistence.SQLiteManager;
-import com.test.geo.optimal.threads.OnClicTableRow;
 
 public class Results extends Activity {
 
@@ -27,12 +29,24 @@ public class Results extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_results);
 
+		
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
 		TableLayout table = (TableLayout) findViewById(R.id.table);
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
 
+		// Muestra muestra = new Muestra("11111	", "11111322", 0, "5545", 0, 0,
+		// "", "");
+
 		List<Muestra> muestras = SQLiteManager.getInstance().getAll(this);
 		Log.i("CANTIDAD", muestras.size() + "");
+
 		for (final Muestra muestra : muestras) {
 
 			TableRow newRow = new TableRow(this);
@@ -41,8 +55,10 @@ public class Results extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					new OnClicTableRow(v).start();
-					cambiarActivity(muestra);
+					v.setBackgroundColor(Color.GRAY);
+					Handler handler  = new Handler();
+					handler.postDelayed(cambiarActivity(muestra,v), 1000);
+					
 				}
 			});
 			TextView day1High = new TextView(this);
@@ -83,12 +99,29 @@ public class Results extends Activity {
 
 			table.addView(newRow);
 		}
-
 	}
-
-	private void cambiarActivity(Muestra muestra) {
-		Log.i(TAG, muestra.getDescripcion());
+	private Runnable cambiarActivity(final Muestra muestra, final View v) {
+		Runnable runnable = new Runnable(){
+			@Override
+			public void run(){
+				cambiarActivity2(muestra);
+				v.setBackgroundColor(Color.TRANSPARENT);
+			}
+		};
+		return runnable;
 	}
+	private void cambiarActivity2(Muestra muestra){
+		Intent intent = new Intent();
+		intent.setClass(this, DetalleMuestra.class);
+		intent.putExtra("latitud", muestra.getLatitude());
+		intent.putExtra("longitud", muestra.getLonguitude());
+		intent.putExtra("calificacion", muestra.getCalificacion());
+		intent.putExtra("precision", muestra.getPrecision());
+		intent.putExtra("satelites", muestra.getNumeroSatelites());
+		intent.putExtra("proveedor", muestra.getProviderName());
+		startActivity(intent);
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

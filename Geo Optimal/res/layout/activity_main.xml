@@ -122,4 +122,12 @@
         android:layout_alignRight="@+id/linearLayout1"
         android:text="@string/result" />
 
+    <Button
+        android:id="@+id/estadisticas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_toLeftOf="@+id/resultados"
+        android:text="@string/estadisticas" />
+
 </RelativeLayout>

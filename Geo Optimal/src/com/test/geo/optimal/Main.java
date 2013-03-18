@@ -63,6 +63,7 @@ public class Main extends MapActivity{
 	private Button buena;
 	private Button excelente;
 	private Button resultados;
+	private Button estadisticas;
 	
 	private LinearLayout votar;
 	private LinearLayout contendor_descripcion;
@@ -93,6 +94,7 @@ public class Main extends MapActivity{
         this.excelente= (Button) findViewById(R.id.excelente);
         this.descripcion= (EditText) findViewById(R.id.descripcion);
         this.resultados = (Button) findViewById(R.id.resultados);
+        this.estadisticas= (Button) findViewById(R.id.estadisticas);
         
         
         Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
@@ -144,12 +146,24 @@ public class Main extends MapActivity{
 			}
 		});	
         
+        estadisticas.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				verEstadisticas();
+			}
+		});
+        
         //localizar();
 	}
 	
 	private void verResultados(){
 		Intent intent = new Intent(this,Results.class);
-		
+		startActivity(intent);
+	}
+	
+	private void verEstadisticas(){
+		Intent intent = new Intent(this,Estadisticas.class);
 		startActivity(intent);
 	}
 	
