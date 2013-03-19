@@ -195,28 +195,28 @@ public class Metadatos {
 		
 		//proveedores gps
 		if(this.count_malas > 0){
-			this.prom_malas_gps = this.count_malas_gps / this.count_malas;
+			this.prom_malas_gps = this.count_malas_gps * 100 / this.count_malas;
 		}
 		
 		if(this.count_buenas > 0){
-			this.prom_buenas_gps = this.count_buenas_gps / this.count_buenas;
+			this.prom_buenas_gps = this.count_buenas_gps * 100 / this.count_buenas;
 		}
 		
 		if(this.count_excelentes > 0){
-			this.prom_excelentes_gps = this.count_excelentes_gps / this.count_excelentes;
+			this.prom_excelentes_gps = this.count_excelentes_gps * 100 / this.count_excelentes;
 		}
 		
 		//proveedores net
 		if(this.count_malas > 0){
-			this.prom_malas_net = this.count_malas_net / this.count_malas;
+			this.prom_malas_net = this.count_malas_net * 100 / this.count_malas;
 		}
 		
 		if(this.count_buenas > 0){
-			this.prom_buenas_net = this.count_buenas_net / this.count_buenas;
+			this.prom_buenas_net = this.count_buenas_net * 100 / this.count_buenas;
 		}
 		
 		if(this.count_excelentes > 0){
-			this.prom_excelentes_net = this.count_excelentes_net / this.count_excelentes;
+			this.prom_excelentes_net = this.count_excelentes_net * 100 / this.count_excelentes;
 		}
 		
 	}
