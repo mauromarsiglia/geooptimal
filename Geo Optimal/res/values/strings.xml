@@ -59,5 +59,7 @@
     <string name="cantidad_muestras_excelentes">Cantidad muestras excelentes</string>
     <string name="cantidad_muestras_buenas">Cantidad muestras buenas</string>
     <string name="cantidad_muestras_malas">Cantidad muestras malas</string>
+    <string name="desc_column">Variable</string>
+    <string name="value_column">Valor</string>
 
 </resources>
