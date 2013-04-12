@@ -25,7 +25,7 @@ public class Results extends Activity {
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
 
-		MuestraController.getInstance().getMuestra(this,table);
+		MuestraController.getInstance().getMuestra(this,table,1);
 	//	Log.i("CANTIDAD", muestras.size() + "");
 
 		/*for (final Muestra muestra : muestras) {

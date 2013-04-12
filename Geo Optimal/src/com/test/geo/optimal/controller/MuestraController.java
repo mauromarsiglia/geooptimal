@@ -28,6 +28,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.test.geo.optimal.R;
 import com.test.geo.optimal.library.Muestra;
 
 
@@ -95,7 +96,7 @@ public class MuestraController {
 		rest_get_add_event.call();
 	}
 	
-	public void getMuestra(final Context context, final TableLayout table){
+	public void getMuestra(final Context context, final TableLayout table, final int opcion){
 		
 		final List<Muestra> muestras = new LinkedList<Muestra>();
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -135,7 +136,12 @@ public class MuestraController {
 								muestras.add(muestra_model);
 							}
 							Log.e(TAG, muestras.size()+1+"");
-							fillMuestras(muestras,table,context);
+							if(opcion==1){
+								fillMuestras(muestras,table,context);
+							}else{
+								Metadatos.getInstance().saveEstadistica(muestras);
+								fillEstadisticas(muestras,table,context);
+							}
 							hideProgess();
 						} else {
 							JSONArray errors = response
@@ -249,6 +255,102 @@ public class MuestraController {
 			}
 		};
 		return runnable;
+	}
+	
+	public void fillEstadisticas(List<Muestra> muestras,TableLayout tableLayout, final Context context){
+				//header
+				TableRow newRow = new TableRow(context);
+				TextView text = new TextView(context);
+				text.setText(context.getString(R.string.desc_column));
+				text.setGravity(Gravity.CENTER_HORIZONTAL);
+				newRow.addView(text);
+				newRow.addView(getTextView( R.string.value_column ,context));
+				tableLayout.addView(newRow);
+				
+				//Cantidad de muestra segun calificacion
+				tableLayout.addView(createRow(R.string.cantidad_muestras_malas, Metadatos.getInstance().getCount_malas()+"",context));
+				tableLayout.addView(createRow(R.string.cantidad_muestras_buenas, Metadatos.getInstance().getCount_buenas()+"",context));
+				tableLayout.addView(createRow(R.string.cantidad_muestras_excelentes, Metadatos.getInstance().getCount_excelentes()+"",context));
+				
+				//Promedio de muestras por categoria
+				tableLayout.addView(createRow(R.string.porcentaje_muestras_malas, Metadatos.getInstance().getMalas()+"%",context));
+				tableLayout.addView(createRow(R.string.porcentaje_muestras_buenas, Metadatos.getInstance().getBuenas()+"%",context));
+				tableLayout.addView(createRow(R.string.porcentaje_muestras_excelentes, Metadatos.getInstance().getExcelentes()+"%",context));
+				
+				
+				//Total precisión de las muestras segun la clasificacion
+				tableLayout.addView(createRow(R.string.precision_muestras_malas, Metadatos.getInstance().getCount_error_malas()+"",context));
+				tableLayout.addView(createRow(R.string.precision_muestras_buenas, Metadatos.getInstance().getCount_error_buenas()+"",context));
+				tableLayout.addView(createRow(R.string.precision_muestras_excelentes, Metadatos.getInstance().getCount_error_excelentes()+"",context));
+				
+				//Total Acumulado de error
+				tableLayout.addView(createRow(R.string.total_imprecision_promedios, Metadatos.getInstance().getTotal_error()+"",context));
+				
+				//Promedio de precisión segun la calificacion
+				tableLayout.addView(createRow(R.string.porcentaje_precision_malas, Metadatos.getInstance().getProm_error_malas()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_precision_buenas, Metadatos.getInstance().getProm_error_buenas()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_precision_excelente, Metadatos.getInstance().getProm_error_excelentes()+"",context));
+				
+				//Promedio de satelites usados
+				tableLayout.addView(createRow(R.string.porcentaje_satelites_muestras_malas, Metadatos.getInstance().getProm_malas_satelites()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_satelites_muestras_buenas, Metadatos.getInstance().getProm_buenas_satelites()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_satelites_muestras_excelentes, Metadatos.getInstance().getProm_excelentes_satelites()+"",context));
+				
+				//total de veces que se uso cada proveedor
+				tableLayout.addView(createRow(R.string.cantidad_gps, Metadatos.getInstance().getCount_total_veces_gps()+"",context));
+				tableLayout.addView(createRow(R.string.cantidad_network, Metadatos.getInstance().getCount_total_veces_net()+"",context));
+				
+				//Resumen uso de gps segun calificacion
+				//gps
+				tableLayout.addView(createRow(R.string.proveedor_gps_muestas_malas, Metadatos.getInstance().getCount_malas_gps()+"",context));
+				tableLayout.addView(createRow(R.string.proveedor_gps_muestras_buenas, Metadatos.getInstance().getCount_buenas_gps()+"",context));
+				tableLayout.addView(createRow(R.string.proveedor_gps_muestras_excelentes, Metadatos.getInstance().getCount_excelentes_gps()+"",context));
+				
+				//network
+				tableLayout.addView(createRow(R.string.proveedor_newtork_muestras_malas, Metadatos.getInstance().getCount_malas_net()+"",context));
+				tableLayout.addView(createRow(R.string.proveedor_network_muestras_buenas, Metadatos.getInstance().getCount_buenas_net()+"",context));
+				tableLayout.addView(createRow(R.string.proveedor_network_muestras_excelentes, Metadatos.getInstance().getCount_excelentes_net()+"",context));
+				
+				//Promedio de uso de proveedor por calificacion
+				//gps
+				tableLayout.addView(createRow(R.string.porcentaje_gps_muestras_malas, Metadatos.getInstance().getProm_malas_gps()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_gps_muestras_buenas, Metadatos.getInstance().getProm_buenas_gps()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_gps_muestras_excelentes, Metadatos.getInstance().getProm_excelentes_gps()+"",context));
+				
+				//network
+				tableLayout.addView(createRow(R.string.porcentaje_network_muestras_malas, Metadatos.getInstance().getProm_malas_net()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_network_muestras_buenas, Metadatos.getInstance().getProm_buenas_net()+"",context));
+				tableLayout.addView(createRow(R.string.porcentaje_network_muestras_excelentes, Metadatos.getInstance().getProm_excelentes_net()+"",context));
+	}
+	
+	private TextView getTextView(int string_id, Context context){
+		
+		TextView text = new TextView(context);
+		text.setText(context.getString(string_id));
+		text.setGravity(Gravity.LEFT);
+		
+		return text;
+		
+	}
+	
+	private TextView getTextView(String content, Context context){
+		
+		TextView text = new TextView(context);
+		text.setText(content);
+		text.setGravity(Gravity.CENTER_HORIZONTAL);
+		
+		return text;
+		
+	}
+	
+	private TableRow createRow(int string_id, String content, Context context){
+		
+		TableRow newRow = new TableRow(context);
+		newRow.addView(getTextView(string_id,context));
+		newRow.addView(getTextView( content,context ));
+		
+		return newRow;
+		
 	}
 	
 	
