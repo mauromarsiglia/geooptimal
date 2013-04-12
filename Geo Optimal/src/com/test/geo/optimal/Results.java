@@ -1,28 +1,15 @@
 package com.test.geo.optimal;
 
-import java.util.List;
-
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.test.geo.optimal.controller.MuestraController;
-import com.test.geo.optimal.library.Muestra;
-import com.test.geo.optimal.persistence.SQLiteManager;
 
 public class Results extends Activity {
 
-	private static final String TAG = "RESULTS";
+	//private static final String TAG = "RESULTS";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +25,7 @@ public class Results extends Activity {
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
 
-		List<Muestra> muestras = MuestraController.getInstance().getMuestra(this,table);
+		MuestraController.getInstance().getMuestra(this,table);
 	//	Log.i("CANTIDAD", muestras.size() + "");
 
 		/*for (final Muestra muestra : muestras) {
@@ -102,7 +89,7 @@ public class Results extends Activity {
 		
 		
 	}
-	private Runnable cambiarActivity(final Muestra muestra, final View v) {
+	/*private Runnable cambiarActivity(final Muestra muestra, final View v) {
 		Runnable runnable = new Runnable(){
 			@Override
 			public void run(){
@@ -111,8 +98,8 @@ public class Results extends Activity {
 			}
 		};
 		return runnable;
-	}
-	private void cambiarActivity2(Muestra muestra){
+	}*/
+	/*private void cambiarActivity2(Muestra muestra){
 		Log.i(TAG, muestra.getPrecision()+"");
 		Intent intent = new Intent();
 		intent.setClass(this, DetalleMuestra.class);
@@ -124,7 +111,7 @@ public class Results extends Activity {
 		intent.putExtra("proveedor", muestra.getProviderName());
 		intent.putExtra("imagen", muestra.getPathImagen());
 		startActivity(intent);
-	}
+	}*/
 	
 
 	@Override

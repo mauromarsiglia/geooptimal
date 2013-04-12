@@ -18,7 +18,6 @@ import utils.Params;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
@@ -29,7 +28,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.test.geo.optimal.DetalleMuestra;
 import com.test.geo.optimal.library.Muestra;
 
 
@@ -97,7 +95,7 @@ public class MuestraController {
 		rest_get_add_event.call();
 	}
 	
-	public List<Muestra> getMuestra(final Context context, final TableLayout table){
+	public void getMuestra(final Context context, final TableLayout table){
 		
 		final List<Muestra> muestras = new LinkedList<Muestra>();
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -159,7 +157,7 @@ public class MuestraController {
 		});
 		rest_get_events.call();
 		
-		return muestras;
+		
 	}
 	
 	public void showProgess(Context context){

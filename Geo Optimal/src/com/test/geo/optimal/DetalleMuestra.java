@@ -1,11 +1,6 @@
 package com.test.geo.optimal;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -64,7 +59,7 @@ public class DetalleMuestra extends Activity {
        
         //Bitmap b = imagen;
 		if(!nombre.equals("")){
-	        File sd = Environment.getExternalStorageDirectory();
+	       // File sd = Environment.getExternalStorageDirectory();
 	        String the_path = Environment.getExternalStorageDirectory()
 	        			+ File.separator + "prohibidoparquear";
 	
