@@ -16,6 +16,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.test.geo.optimal.controller.MuestraController;
 import com.test.geo.optimal.library.Muestra;
 import com.test.geo.optimal.persistence.SQLiteManager;
 
@@ -37,10 +38,10 @@ public class Results extends Activity {
 		table.setStretchAllColumns(true);
 		table.setShrinkAllColumns(true);
 
-		List<Muestra> muestras = SQLiteManager.getInstance().getAll(this);
-		Log.i("CANTIDAD", muestras.size() + "");
+		List<Muestra> muestras = MuestraController.getInstance().getMuestra(this,table);
+	//	Log.i("CANTIDAD", muestras.size() + "");
 
-		for (final Muestra muestra : muestras) {
+		/*for (final Muestra muestra : muestras) {
 
 			TableRow newRow = new TableRow(this);
 
@@ -92,7 +93,7 @@ public class Results extends Activity {
 			newRow.addView(day6High);
 
 			table.addView(newRow);
-		}
+		}*/
 	}
 
 	@Override

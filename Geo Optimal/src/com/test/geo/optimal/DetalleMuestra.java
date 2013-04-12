@@ -63,23 +63,24 @@ public class DetalleMuestra extends Activity {
 
        
         //Bitmap b = imagen;
-
-        File sd = Environment.getExternalStorageDirectory();
-        String the_path = Environment.getExternalStorageDirectory()
-        			+ File.separator + "prohibidoparquear";
-
-      	String the_file = the_path + File.separator +  nombre +".jpg";
-
-        File f = new File(the_file);
-          
-        if(f.exists()){
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
-
-            ImageView myImage = (ImageView) findViewById(R.id.imagen_muestra);
-            myImage.setImageBitmap(myBitmap);
-
-        }
+		if(!nombre.equals("")){
+	        File sd = Environment.getExternalStorageDirectory();
+	        String the_path = Environment.getExternalStorageDirectory()
+	        			+ File.separator + "prohibidoparquear";
+	
+	      	String the_file = the_path + File.separator +  nombre +".jpg";
+	
+	        File f = new File(the_file);
+	          
+	        if(f.exists()){
+	
+	            Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+	
+	            ImageView myImage = (ImageView) findViewById(R.id.imagen_muestra);
+	            myImage.setImageBitmap(myBitmap);
+	
+	        }
+		}
           
 	}
 

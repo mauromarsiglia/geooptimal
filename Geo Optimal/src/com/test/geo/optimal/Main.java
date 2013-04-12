@@ -37,6 +37,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.test.geo.optimal.controller.MuestraController;
 import com.test.geo.optimal.library.Muestra;
 import com.test.geo.optimal.persistence.SQLiteManager;
 
@@ -190,6 +191,7 @@ public class Main extends MapActivity{
 			@Override
 			public void onClick(View v) {
 				agregarMuestra(Muestra.BUENA);
+				
 			}
 		});
         
@@ -255,7 +257,7 @@ public class Main extends MapActivity{
 			String path_imagen=guardarImagen();		
 			Muestra muestra = new Muestra(latitud_actual+"",longitud_actual+"",precision_actual,proveedor,numero_satelites,calificacion,des,path_imagen);
 			SQLiteManager.getInstance().saveMuestra(muestra, this);
-	
+			MuestraController.getInstance().addMuestra(muestra);
 			for(Muestra m:SQLiteManager.getInstance().getAll(this)){
 				Log.i(TAG,m.getDescripcion());
 		
@@ -270,7 +272,7 @@ public class Main extends MapActivity{
 	        toast2.setGravity(Gravity.CENTER|Gravity.LEFT,0,0);
 	 
 	        toast2.show();
-	
+	        
 	}
 	
 	private void reiniciar(){
@@ -332,10 +334,10 @@ public class Main extends MapActivity{
 			
 		    public void onLocationChanged(Location location) {
 		    	
-		    	Log.i(TAG, "-------------------------------------------------");
-		    	Log.i(TAG,location.getExtras().getInt("satellites")+"");
-		    	Log.i(TAG, "-------------------------------------------------");
-		    	
+//		    	Log.i(TAG, "-------------------------------------------------");
+////		    	Log.i(TAG,location.getExtras().getInt("satellites")+"");
+//		    	Log.i(TAG, "-------------------------------------------------");
+//		    	
 		    	if(isBetterLocation(location, Main.this.currentBestLocation)){
 		    		
 		    		longitud_actual= location.getLongitude();
@@ -350,11 +352,11 @@ public class Main extends MapActivity{
 		    		longitud.setText("Longitud: " + String.valueOf(longitud_actual));
 		    		precision.setText("Precision: " + String.valueOf(precision_actual) +" m");
 		    		satelites.setText("# satelites: " + String.valueOf(numero_satelites) );
-		    		
-			    	Log.i(TAG, "-------------------------------------------------");
-			    	Log.i(TAG,"longitud:"+longitud_actual);
-			    	Log.i(TAG,"latitud:"+latitud_actual);
-			    	Log.i(TAG, "-------------------------------------------------");
+//		    		
+//			    	Log.i(TAG, "-------------------------------------------------");
+//			    	Log.i(TAG,"longitud:"+longitud_actual);
+//			    	Log.i(TAG,"latitud:"+latitud_actual);
+//			    	Log.i(TAG, "-------------------------------------------------");
 		    	}else{
 		    		
 		    		longitud_actual= Main.this.currentBestLocation.getLongitude();
