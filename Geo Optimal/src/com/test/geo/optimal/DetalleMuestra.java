@@ -38,9 +38,9 @@ public class DetalleMuestra extends Activity {
 		
 		longitud.setText("Longitud: "+bundle.getString("longitud"));
 		latitud.setText("Latitud: "+bundle.getString("latitud"));
-		calificacion.setText("Calificacion: "+bundle.getInt("calificacion"));
-		error.setText("Precision: "+bundle.getDouble("precision"));
-		satelites.setText("# de satelites: "+bundle.getInt("satelites"));
+		calificacion.setText("Calificacion: "+bundle.getString("calificacion"));
+		error.setText("Precision: "+bundle.getString("precision"));
+		satelites.setText("# de satelites: "+bundle.getString("satelites"));
 		proveedor.setText("Proveedor : "+bundle.getString("proveedor"));
 		Log.i(TAG,bundle.getString("imagen"));
 		abrirImagen(bundle.getString("imagen"));

@@ -171,6 +171,8 @@ public class Main extends MapActivity{
 						
 						contendor_descripcion=(LinearLayout)findViewById(R.id.conteneror_descripcion);
 						contendor_descripcion.setVisibility(View.VISIBLE);
+						resultados.setVisibility(View.GONE);
+						estadisticas.setVisibility(View.GONE);
 						
 					}
 					
@@ -294,6 +296,8 @@ public class Main extends MapActivity{
 	    }
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.push_pin);
         itemizedOverlay = new MyOverlay(drawable, this);
+        estadisticas.setVisibility(View.VISIBLE);
+        resultados.setVisibility(View.VISIBLE);
 	}
 	
 	
